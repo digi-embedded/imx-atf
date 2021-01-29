@@ -58,7 +58,7 @@ static const struct imx_rdc_cfg rdc[] = {
 	RDC_MDAn(RDC_MDA_M4, DID1),
 
 	/* peripherals domain permission */
-	RDC_PDAPn(RDC_PDAP_UART4, D1R | D1W),
+	/*RDC_PDAPn(RDC_PDAP_UART4, D1R | D1W),*/
 	RDC_PDAPn(RDC_PDAP_UART2, D0R | D0W),
 
 	/* memory region */
@@ -129,7 +129,7 @@ static void bl31_tzc380_setup(void)
 void bl31_early_platform_setup2(u_register_t arg0, u_register_t arg1,
 		u_register_t arg2, u_register_t arg3)
 {
-	static console_uart_t console;
+	/*static console_uart_t console;*/
 	int i;
 
 	/* Enable CSU NS access permission */
@@ -144,11 +144,11 @@ void bl31_early_platform_setup2(u_register_t arg0, u_register_t arg1,
 	imx_csu_init(csu_cfg);
 
 	imx8m_caam_init();
-
-	console_imx_uart_register(IMX_BOOT_UART_BASE, IMX_BOOT_UART_CLK_IN_HZ,
+	/* Uncomment to use the M4 debug console (shared with A53 UART4) */
+	/*console_imx_uart_register(IMX_BOOT_UART_BASE, IMX_BOOT_UART_CLK_IN_HZ,
 		IMX_CONSOLE_BAUDRATE, &console);
-	/* This console is only used for boot stage */
-	console_set_scope(&console.console, CONSOLE_FLAG_BOOT);
+	 This console is only used for boot stage
+	console_set_scope(&console.console, CONSOLE_FLAG_BOOT);*/
 
 	/*
 	 * tell BL3-1 where the non-secure software image is located
