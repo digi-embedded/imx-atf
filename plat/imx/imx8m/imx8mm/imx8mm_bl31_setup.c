@@ -70,7 +70,9 @@ static const struct imx_rdc_cfg rdc[] = {
 static const struct imx_csu_cfg csu_cfg[] = {
 	/* peripherals csl setting */
 	CSU_CSLx(0x1, CSU_SEC_LEVEL_0, UNLOCKED),
+#ifdef SPD_trusty
 	CSU_CSLx(0x72, CSU_SEC_LEVEL_4, LOCKED), /* CAAM */
+#endif
 
 	/* master HP0~1 */
 
