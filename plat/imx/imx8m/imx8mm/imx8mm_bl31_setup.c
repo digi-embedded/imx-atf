@@ -70,10 +70,23 @@ static const struct imx_rdc_cfg rdc[] = {
 static const struct imx_csu_cfg csu_cfg[] = {
 	/* peripherals csl setting */
 	CSU_CSLx(0x1, CSU_SEC_LEVEL_0, UNLOCKED),
+	CSU_CSLx(0x72, CSU_SEC_LEVEL_4, LOCKED), /* CAAM */
 
 	/* master HP0~1 */
 
 	/* SA setting */
+	CSU_SA(0x1, 1, LOCKED),  /* M4 */
+	CSU_SA(0x2, 1, LOCKED),  /* SDMA1 */
+	CSU_SA(0x3, 1, LOCKED),  /* CSI */
+	CSU_SA(0x4, 1, LOCKED),  /* USB */
+	CSU_SA(0x5, 1, LOCKED),  /* PCIE */
+	CSU_SA(0x6, 1, LOCKED),  /* VPU */
+	CSU_SA(0x7, 1, LOCKED),  /* GPU */
+	CSU_SA(0x9, 1, LOCKED),  /* ENET */
+	CSU_SA(0xa, 1, LOCKED),  /* USDHC1 */
+	CSU_SA(0xb, 1, LOCKED),  /* USDHC2 */
+	CSU_SA(0xc, 1, LOCKED),  /* DCSS */
+	CSU_SA(0xe, 1, LOCKED),  /* DAP */
 
 	/* HP control setting */
 
@@ -120,10 +133,18 @@ static void bl31_tzc380_setup(void)
 	 * Need to substact offset 0x40000000 from CPU address when
 	 * programming tzasc region for i.mx8mm.
 	 */
+#ifdef SPD_trusty
+	tzc380_configure_region(0, 0x00000000, TZC_ATTR_REGION_SIZE(TZC_REGION_SIZE_4G) |
+			TZC_ATTR_REGION_EN_MASK | TZC_ATTR_SP_NS_RW);
+	tzc380_configure_region(1, (BL32_BASE - IMX_DRAM_BASE), TZC_ATTR_REGION_SIZE(TZC_REGION_SIZE_32M) |
+			TZC_ATTR_REGION_EN_MASK | TZC_ATTR_SP_S_RW);
 
+#else
 	/* Enable 1G-5G S/NS RW */
 	tzc380_configure_region(0, 0x00000000, TZC_ATTR_REGION_SIZE(TZC_REGION_SIZE_4G) |
 				TZC_ATTR_REGION_EN_MASK | TZC_ATTR_SP_ALL);
+#endif
+
 }
 
 void bl31_early_platform_setup2(u_register_t arg0, u_register_t arg1,
